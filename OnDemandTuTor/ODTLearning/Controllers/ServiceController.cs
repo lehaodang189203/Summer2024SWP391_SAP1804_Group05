@@ -18,7 +18,7 @@ namespace ODTLearning.Controllers
             _repo = repo;
         }
         [HttpPost("createService")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+        //[Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> CreateServiceLearning(string id,[FromBody] ServiceLearningModel model)
         {
             try
@@ -52,7 +52,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPost("bookingService")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> BookingServiceLearning(string id, string idService, [FromBody] BookingServiceLearingModels model)
         {
             try
@@ -121,7 +121,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpGet("getAllService")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> GetAllService()
         {
             try
@@ -155,7 +155,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpPut("updateService")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> UpdateService(string idService, [FromBody] ServiceLearningModel model)
         {
             try
@@ -190,7 +190,7 @@ namespace ODTLearning.Controllers
         }
        
         [HttpDelete("deleteService")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> DeleteService(string idService)
         {
             try

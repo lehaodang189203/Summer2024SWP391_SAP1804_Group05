@@ -15,16 +15,16 @@ namespace ODTLearning.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        private readonly IStudentRepository _repo;
+        private readonly StudentRepository _repo;
 
-        public StudentController(IStudentRepository repo, DbminiCapstoneContext context)
+        public StudentController(StudentRepository repo, DbminiCapstoneContext context)
         {
             _repo = repo;
         }
 
         
         [HttpGet("GetAllStudent")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+        //[Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewListStudent()
         {
             try
@@ -60,7 +60,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("GetAmountStudent")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+        //[Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewAmountStudent()
         {
             var response = await _repo.GetAmountStudent();

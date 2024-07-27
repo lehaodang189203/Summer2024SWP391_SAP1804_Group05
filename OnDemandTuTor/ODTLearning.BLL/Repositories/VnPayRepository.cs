@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ODTLearning.BLL.Repositories
 {
-    public class VnPayRepository : IVnPayRepository
+    public class VnPayRepository
     {
         private readonly IConfiguration _config;
 

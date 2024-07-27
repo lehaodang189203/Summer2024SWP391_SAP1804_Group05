@@ -18,7 +18,7 @@ namespace ODTLearning.Controllers
             _repo = repo;
         }
         [HttpPost("CreateComplaint")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> CreateComplaint(ComplaintModel model)
         {
             var response = await _repo.CreateComplaint(model);
@@ -40,7 +40,7 @@ namespace ODTLearning.Controllers
             });
         }
         [HttpGet("ViewAllComplaint")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+       // [Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewAllComplaint()
         {
             var response = await _repo.GetAllComplaint();

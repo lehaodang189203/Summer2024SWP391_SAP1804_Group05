@@ -4,24 +4,34 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace ODTLearning.BLL.Models
 {
+
+    public static class EnumExtensions
+    {
+        public static string GetDescription<T>(this T enumValue) where T : Enum
+        {
+            FieldInfo fi = enumValue.GetType().GetField(enumValue.ToString());
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return attributes.Length > 0 ? attributes[0].Description : enumValue.ToString();
+        }
+    }
     public enum UserRole
     {
         [Description("học sinh")]
-        HocSinh,
+        Student ,
 
         [Description("gia sư")]
-        GiaSu,
+        Tutor,
 
         [Description("quản trị viên")]
-        QuanTriVien,
+        Admin,
 
         [Description("kiểm duyệt viên")]
-        KiemDuyetVien
+        Moderator,
     }
-
     public static class UserRoleAuthorize
     {
         public const string Student = "học sinh";

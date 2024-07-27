@@ -6,9 +6,5 @@
 
         public string? Password { get; set; }
     }
-    public class SignInGGModel
-    {
-        public string? Email { get; set; }
 
-   }
 }

@@ -29,10 +29,9 @@ namespace ODTLearning.BLL.Repositories
                 return new ApiResponse<bool>
                 {
                     Success = false,
-                    Message = "Không tìm thấy tài khoản nào với ID này hoặc bạn chưa đăng ký làm gia sư!",
+                    Message = "Bạn chưa đăng ký làm gia sư!",
                 };
             }
-
 
             // Tìm lớp học theo tên
             var classEntity = await _context.Classes.FirstOrDefaultAsync(cl => cl.ClassName == model.Class);
@@ -77,7 +76,7 @@ namespace ODTLearning.BLL.Repositories
             // Thêm Date và TimeSlot vào context
             foreach (var dateModel in model.Schedule)
             {
-                var dateEntity = new ODTLearning.DAL.Entities.Date
+                var dateEntity = new Date
                 {
                     Id = Guid.NewGuid().ToString(),
                     Date1 = DateOnly.Parse(dateModel.Date),

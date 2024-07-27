@@ -18,7 +18,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("ViewAllNotification")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAllNotification(string id)
         {
             var response = await _repo.GetAllNotification(id);
@@ -41,7 +41,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPut("UpdateStatusNotification")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> UpdateStatusNotification(string id)
         {
             var response = await _repo.UpdateStatusNotification(id);

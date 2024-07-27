@@ -15,17 +15,17 @@ namespace ODTLearning.Controllers
     [ApiController]
     public class paymentController : ControllerBase
     {
-        private readonly IVnPayRepository _repo;
+        private readonly VnPayRepository _repo;
         private readonly DbminiCapstoneContext _context;
 
-        public paymentController(IVnPayRepository repo, DbminiCapstoneContext context)
+        public paymentController(VnPayRepository repo, DbminiCapstoneContext context)
         {
             _repo = repo;
             _context = context;
         }
 
         [HttpPost("payment")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult> Payment(DepositModel model)
         {
             var user = _context.Accounts.FirstOrDefault(x => x.Id == model.Id);

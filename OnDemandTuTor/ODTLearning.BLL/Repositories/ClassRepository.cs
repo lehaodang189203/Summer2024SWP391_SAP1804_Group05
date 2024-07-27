@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ODTLearning.BLL.Models;
 
 namespace ODTLearning.BLL.Repositories
 {
@@ -30,7 +31,7 @@ namespace ODTLearning.BLL.Repositories
                 };
             }
 
-            if (existingUser.Roles.ToLower() == "học sinh")
+            if (existingUser.Roles.ToLower() == EnumExtensions.GetDescription(UserRole.Student))
             {
                 var classRequests = await _context.ClassRequests.Include(x => x.IdRequestNavigation).ThenInclude(x => x.IdClassNavigation)
                                                                 .Include(x => x.IdRequestNavigation).ThenInclude(x => x.IdSubjectNavigation)
@@ -198,7 +199,7 @@ namespace ODTLearning.BLL.Repositories
                 };
             }
 
-            if (existingUser.Roles.ToLower() == "học sinh")
+            if (existingUser.Roles.ToLower() == EnumExtensions.GetDescription(UserRole.Student))
             {
                 var bookings = await _context.Bookings.Include(x => x.IdAccountNavigation)
                                                       .Include(x => x.IdTimeSlotNavigation).ThenInclude(x => x.IdDateNavigation).ThenInclude(x => x.IdServiceNavigation)
@@ -222,8 +223,6 @@ namespace ODTLearning.BLL.Repositories
 
                 foreach (var booking in bookings)
                 {
-                    //var tutor = await _context.Tutors.Include(x => x.IdAccountNavigation).FirstOrDefaultAsync(x => x.Id == booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.IdTutor);
-
                     var tutorId = booking?.IdTimeSlotNavigation?.IdDateNavigation?.IdServiceNavigation?.IdTutor;
 
                     if (tutorId == null)

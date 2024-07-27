@@ -11,7 +11,7 @@ using System.Net;
 
 namespace ODTLearning.BLL.Repositories
 {
-    public class StudentRepository : IStudentRepository
+    public class StudentRepository 
     {
         private readonly DbminiCapstoneContext _context;
         public StudentRepository(DbminiCapstoneContext context)

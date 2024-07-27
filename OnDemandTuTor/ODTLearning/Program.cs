@@ -65,11 +65,11 @@ internal class Program
         // Register services
         builder.Services.AddScoped< AccountRepository>();
         builder.Services.AddScoped< TutorRepository>();
-        builder.Services.AddScoped<IStudentRepository, StudentRepository>();       
-        builder.Services.AddScoped<IRevenueRepository, RevenueRepository>();
+        builder.Services.AddScoped<StudentRepository>();       
+        builder.Services.AddScoped< RevenueRepository>();
         builder.Services.AddScoped< RequestRepository>();
         builder.Services.AddScoped<ServiceOfTutorRepository>();
-        builder.Services.AddSingleton<IVnPayRepository, VnPayRepository>();
+        builder.Services.AddSingleton< VnPayRepository>();
         builder.Services.AddScoped<TutorProfileRepository>();
         builder.Services.AddScoped<TransactionRepository>();
         builder.Services.AddScoped<ReviewRepository>();

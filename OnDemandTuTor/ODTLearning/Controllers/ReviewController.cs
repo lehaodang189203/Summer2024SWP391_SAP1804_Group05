@@ -19,7 +19,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPost("CreateReviewRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> CreateReviewRequest(ReviewRequestModel model)
         {
             var response = await _repo.CreateReviewRequest(model);
@@ -41,7 +41,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPost("CreateReviewService")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+      //  [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> CreateReviewService(ReviewServiceModel model)
         {
             var response = await _repo.CreateReviewService(model);
@@ -97,7 +97,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("ViewAllReview")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+       // [Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewAllReview()
         {
             var response = await _repo.GetAllReview();

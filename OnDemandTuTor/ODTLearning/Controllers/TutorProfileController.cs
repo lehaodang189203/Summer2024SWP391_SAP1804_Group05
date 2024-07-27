@@ -18,7 +18,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPost("addSubject")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+      //  [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> AddSubject(string id, string subjectName)
         {
             var response = await _repo.AddSubject(id, subjectName);
@@ -40,7 +40,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPost("addQualification")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> AddQualification(string id, AddQualificationModel model)
         {
             var response = await _repo.AddQualification(id, model);
@@ -62,7 +62,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("getProfileTutor")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> GetTutorProfile(string id)
         {
             var response = await _repo.GetTutorProfile(id);
@@ -85,7 +85,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPut("updateTutorProfile")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> UpdateTutorProfile(string id, [FromBody] TutorProfileToUpdate model)
         {
             var response = await _repo.UpdateTutorProfile(id, model);
@@ -108,7 +108,7 @@ namespace ODTLearning.Controllers
 
 
         [HttpDelete("DeleteSubject")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> DeleteSubject(string id, string subjectName)
         {
             var response = await _repo.DeleteSubject(id, subjectName);
@@ -130,7 +130,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpDelete("DeleteQualification")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> DeleteQualification(string id, string idQualification)
         {
             var response = await _repo.DeleteQualification(id, idQualification);

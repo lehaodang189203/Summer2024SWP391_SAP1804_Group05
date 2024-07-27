@@ -11,6 +11,9 @@ using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Firebase.Auth;
+using ODTLearning.BLL.Models;
+using EnumExtensions = ODTLearning.BLL.Models.EnumExtensions;
 
 namespace ODTLearning.BLL.Repositories
 {
@@ -25,7 +28,7 @@ namespace ODTLearning.BLL.Repositories
             _configuration = configuration;
         }
 
-        EmailLibrary emailLib = new EmailLibrary();
+       private  readonly EmailLibrary emailLib = new EmailLibrary();
 
 
         public async Task<bool> IsEmailExist(string email)
@@ -46,7 +49,7 @@ namespace ODTLearning.BLL.Repositories
                 Email = model.email,
                 DateOfBirth = model.date_of_birth,
                 Gender = model.gender,
-                Roles = "học sinh"
+                Roles = EnumExtensions.GetDescription(UserRole.Student),
             };
             // Thêm Account vào context
             await _context.Accounts.AddAsync(user);
@@ -172,8 +175,6 @@ namespace ODTLearning.BLL.Repositories
             return list;
         }
 
-
-
         public async Task<string> ChangePassword(string id, ChangePasswordModel model)
         {
             var user = await _context.Accounts.SingleOrDefaultAsync(x => x.Id == id);
@@ -292,16 +293,16 @@ namespace ODTLearning.BLL.Repositories
 
             var userProfile = new
             {
-                Id = account.Id,
+                account.Id,
                 account.Email,
                 fullName = account.FullName,
                 Date_of_birth = account.DateOfBirth,
-                Gender = account.Gender,
-                Avatar = account.Avatar,
-                Address = account.Address,
-                Phone = account.Phone,
-                Roles = account.Roles,
-                AccountBalance = account.AccountBalance,
+                account.Gender,
+                account.Avatar,
+                account.Address,
+                account.Phone,
+                account.Roles,
+                account.AccountBalance,
             };
 
             return new ApiResponse<object>
@@ -383,202 +384,7 @@ namespace ODTLearning.BLL.Repositories
                 };
             }
         }
-
-
-       
-
-
-
-        public async Task<ApiResponse<object>> GetClassService(string id)
-        {
-            var existingUser = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (existingUser == null)
-            {
-                return new ApiResponse<object>
-                {
-                    Success = false,
-                    Message = "Không tìm thấy người dùng"
-                };
-            }
-
-            if (existingUser.Roles.ToLower() == "học sinh")
-            {
-                var bookings = await _context.Bookings.Include(x => x.IdAccountNavigation)
-                                                      .Include(x => x.IdTimeSlotNavigation).ThenInclude(x => x.IdDateNavigation).ThenInclude(x => x.IdServiceNavigation)
-                                                                                                                                .ThenInclude(x => x.IdClassNavigation)
-                                                      .Include(x => x.IdTimeSlotNavigation).ThenInclude(x => x.IdDateNavigation).ThenInclude(x => x.IdServiceNavigation)
-                                                                                                                                .ThenInclude(x => x.IdSubjectNavigation)
-                                                      .Where(x => x.IdAccount == id)
-                                                      .ToListAsync();
-
-
-                if (!bookings.Any())
-                {
-                    return new ApiResponse<object>
-                    {
-                        Success = false,
-                        Message = "Bạn không có lớp học",
-                    };
-                }
-
-                var list = new List<object>();
-
-                foreach (var booking in bookings)
-                {
-                    //var tutor = await _context.Tutors.Include(x => x.IdAccountNavigation).FirstOrDefaultAsync(x => x.Id == booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.IdTutor);
-
-                    var tutorId = booking?.IdTimeSlotNavigation?.IdDateNavigation?.IdServiceNavigation?.IdTutor;
-
-                    if (tutorId == null)
-                    {
-                        continue;
-                    }
-
-                    var tutor = await _context.Tutors.Include(x => x.IdAccountNavigation).FirstOrDefaultAsync(x => x.Id == tutorId);
-
-                    if (tutor == null)
-                    {
-                        continue;
-                    }
-
-                    var data = new
-                    {
-                        IdBooking = booking.Id,
-                        Title = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.Title,
-                        Subject = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.IdSubjectNavigation?.SubjectName,
-                        Price = booking.Price,
-                        Duration = booking.Duration,
-                        Description = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.Description,
-                        Class = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.IdClassNavigation?.ClassName,
-                        LearningMethod = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.LearningMethod,
-                        Date = booking.IdTimeSlotNavigation.IdDateNavigation.Date1,
-                        TimeSlot = booking.IdTimeSlotNavigation.TimeSlot1,
-                        Status = booking.Status,
-
-                        User = new
-                        {
-                            idUser = existingUser.Id,
-                            Name = existingUser.FullName,
-                            existingUser.Roles,
-                            Email = existingUser.Email,
-                            Date_of_birth = existingUser.DateOfBirth,
-                            Gender = existingUser.Gender,
-                            Avatar = existingUser.Avatar,
-                            Address = existingUser.Address,
-                            Phone = existingUser.Phone
-                        },
-
-                        Tutor = new
-                        {
-                            idAccountTutor = tutor.IdAccountNavigation.Id,
-                            Name = tutor.IdAccountNavigation.FullName,
-                            Email = tutor.IdAccountNavigation.Email,
-                            tutor.IdAccountNavigation.Roles,
-                            Date_of_birth = tutor.IdAccountNavigation.DateOfBirth,
-                            Gender = tutor.IdAccountNavigation.Gender,
-                            Avatar = tutor.IdAccountNavigation.Avatar,
-                            Address = tutor.IdAccountNavigation.Address,
-                            Phone = tutor.IdAccountNavigation.Phone
-                        }
-                    };
-
-                    list.Add(data);
-                }
-
-                return new ApiResponse<object>
-                {
-                    Success = true,
-                    Message = "Thành công",
-                    Data = list
-                };
-            }
-
-            if (existingUser.Roles.ToLower() == "gia sư")
-            {
-                var tutor = await _context.Tutors.Include(x => x.IdAccountNavigation).FirstOrDefaultAsync(x => x.IdAccountNavigation.Id == id);
-
-                var bookings = await _context.Bookings.Include(x => x.IdAccountNavigation)
-                                                      .Include(x => x.IdTimeSlotNavigation).ThenInclude(x => x.IdDateNavigation).ThenInclude(x => x.IdServiceNavigation)
-                                                                                                                                .ThenInclude(x => x.IdClassNavigation)
-                                                      .Include(x => x.IdTimeSlotNavigation).ThenInclude(x => x.IdDateNavigation).ThenInclude(x => x.IdServiceNavigation)
-                                                                                                                                .ThenInclude(x => x.IdSubjectNavigation)
-                                                      .Where(x => x.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.IdTutor == tutor.Id)
-                                                      .ToListAsync();
-
-
-                if (!bookings.Any())
-                {
-                    return new ApiResponse<object>
-                    {
-                        Success = false,
-                        Message = "Bạn không có lớp học",
-                    };
-                }
-
-                var list = new List<object>();
-
-                foreach (var booking in bookings)
-                {
-                    var user = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == booking.IdAccount);
-
-                    var data = new
-                    {
-                        IdBooking = booking.Id,
-                        Title = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.Title,
-                        Subject = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.IdSubjectNavigation?.SubjectName,
-                        Price = booking.Price,
-                        Duration = booking.Duration,
-                        Description = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.Description,
-                        Class = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.IdClassNavigation?.ClassName,
-                        LearningMethod = booking.IdTimeSlotNavigation.IdDateNavigation.IdServiceNavigation.LearningMethod,
-                        Date = booking.IdTimeSlotNavigation.IdDateNavigation.Date1,
-                        TimeSlot = booking.IdTimeSlotNavigation.TimeSlot1,
-                        Status = booking.Status,
-
-                        User = new
-                        {
-                            Name = booking.IdAccountNavigation.FullName,
-                            Email = booking.IdAccountNavigation.Email,
-                            booking.IdAccountNavigation.Roles,
-                            Date_of_birth = booking.IdAccountNavigation.DateOfBirth,
-                            Gender = booking.IdAccountNavigation.Gender,
-                            Avatar = booking.IdAccountNavigation.Avatar,
-                            Address = booking.IdAccountNavigation.Address,
-                            Phone = booking.IdAccountNavigation.Phone
-                        },
-
-                        Tutor = new
-                        {
-                            Name = tutor.IdAccountNavigation.FullName,
-                            Email = tutor.IdAccountNavigation.Email,
-                            tutor.IdAccountNavigation.Roles,
-                            Date_of_birth = tutor.IdAccountNavigation.DateOfBirth,
-                            Gender = tutor.IdAccountNavigation.Gender,
-                            Avatar = tutor.IdAccountNavigation.Avatar,
-                            Address = tutor.IdAccountNavigation.Address,
-                            Phone = tutor.IdAccountNavigation.Phone
-                        }
-                    };
-
-                    list.Add(data);
-                }
-
-                return new ApiResponse<object>
-                {
-                    Success = true,
-                    Message = "Thành công",
-                    Data = list
-                };
-            }
-
-            return new ApiResponse<object>
-            {
-                Success = false,
-                Message = "Người dùng không phải học sinh hay gia sư"
-            };
-        }        
-       
+        
         public async Task<ApiResponse<bool>> DeleteAccount(string id)
 
         {
@@ -636,7 +442,7 @@ namespace ODTLearning.BLL.Repositories
                             return new ApiResponse<bool>
                             {
                                 Success = false,
-                                Message = "Người dùng đang có lớp học. Không thể xóa."
+                                Message = "Người dùng đang có lớp học. Không thể xóa!"
                             };
                         }
                     }
@@ -780,7 +586,7 @@ namespace ODTLearning.BLL.Repositories
                         return new ApiResponse<bool>
                         {
                             Success = false,
-                            Message = "người dùng đang có lớp học. Không thể xóa."
+                            Message = "Người dùng đang có lớp học. Không thể xóa."
                         };
                     }
                 }
@@ -797,7 +603,6 @@ namespace ODTLearning.BLL.Repositories
                 Message = "Xóa người dùng thành công"
             };
         }
-
 
     }
 }

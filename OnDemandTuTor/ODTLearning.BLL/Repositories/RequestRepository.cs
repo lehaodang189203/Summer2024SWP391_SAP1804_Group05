@@ -92,11 +92,10 @@ namespace ODTLearning.BLL.Repositories
             }
 
 
-
             // Tạo một đối tượng Schedule mới nếu có thông tin về lịch trình
             if (parsedTimeStart.HasValue && parsedTimeEnd.HasValue)
             {
-                var requestOfStudent = new DAL.Entities.Request
+                var requestOfStudent = new Request
                 {
                     Id = Guid.NewGuid().ToString(),
                     Title = model.Title,
@@ -512,7 +511,7 @@ namespace ODTLearning.BLL.Repositories
             };
         }
 
-        public async Task<ApiResponse<bool>> DeleteRequestByStudent(string accountId, string requestId)
+        public async Task<ApiResponse<bool>> DeleteRequest(string accountId, string requestId)
         {
             // Tìm tài khoản theo accountId
             var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == accountId);
@@ -574,63 +573,7 @@ namespace ODTLearning.BLL.Repositories
             };
         }
 
-        public async Task<ApiResponse<bool>> DeleteRequestByModerator(string idRequest)
-        {
-            var request = await _context.Requests.SingleOrDefaultAsync(x => x.Id == idRequest);
-
-            if (request == null)
-            {
-                return new ApiResponse<bool>
-                {
-                    Success = false,
-                    Message = "Không tìm thấy yêu cầu"
-                };
-            }
-
-            if (request.Status.ToLower() == "đang diễn ra")
-            {
-                return new ApiResponse<bool>
-                {
-                    Success = false,
-                    Message = "Yêu cầu đang diễn ra"
-                };
-            }
-
-            var requestLearnings = await _context.RequestLearnings.Where(x => x.IdRequest == idRequest).ToListAsync();
-
-            if (requestLearnings.Any())
-            {
-                _context.RequestLearnings.RemoveRange(requestLearnings);
-            }
-
-            var classRequests2 = await _context.ClassRequests.Where(x => x.IdRequest == idRequest).ToListAsync();
-
-            if (classRequests2.Any())
-            {
-                _context.ClassRequests.RemoveRange(classRequests2);
-            }
-
-            _context.Requests.Remove(request);
-
-            var nofi = new Notification
-            {
-                Id = Guid.NewGuid().ToString(),
-                Description = $"Yêu cầu tìm gia sư '{request.Title}' của bạn đã bị xóa",
-                CreateDate = DateTime.Now,
-                Status = "Chưa xem",
-                IdAccount = request.IdAccount,
-            };
-
-            await _context.Notifications.AddAsync(nofi);
-
-            await _context.SaveChangesAsync();
-
-            return new ApiResponse<bool>
-            {
-                Success = true,
-                Message = "Xóa yêu cầu thành công"
-            };
-        }
+     
 
         public async Task<ApiResponse<List<ViewRequestOfStudent>>> GetAllPendingRequests()
         {
@@ -884,16 +827,6 @@ namespace ODTLearning.BLL.Repositories
             var tutor = accountTutor.Tutor;
 
             var user = await _context.Accounts.SingleOrDefaultAsync(x => x.Id == request.IdAccount);
-
-            //if (user.AccountBalance < request.Price)
-            //{
-            //    return new ApiResponse<SelectTutorModel>
-            //    {
-            //        Success = false,
-            //        Message = "Tài khoản user không đủ tiền yêu cầu",
-            //        Data = null
-            //    };
-            //}            
 
             var rent = new Rent
             {

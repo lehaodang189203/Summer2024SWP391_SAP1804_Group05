@@ -18,7 +18,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("ViewAllTransaction")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+      //  [Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewAllTransaction()
         {
             var response = await _repo.GetAllTransaction();

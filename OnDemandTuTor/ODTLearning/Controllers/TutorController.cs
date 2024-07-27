@@ -22,7 +22,7 @@ namespace ODTLearning.Controllers
 
         }
         [HttpPost("registerAsTutor")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> SignUpOfTutorFB(string id, [FromBody] SignUpModelOfTutor model)
         {
             try
@@ -55,7 +55,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpGet("getSignUpTutor")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> ViewSignUpTutor(string id)
         {
             var response = await _repo.GetSignUpTutor(id);
@@ -77,7 +77,7 @@ namespace ODTLearning.Controllers
             });
         }
         [HttpGet("getAllSignUpTutor")]
-        [Authorize(Roles = UserRoleAuthorize.Moderator)]
+       // [Authorize(Roles = UserRoleAuthorize.Moderator)]
         public async Task<IActionResult> ViewListTutorToConfirm()
         {
             try
@@ -113,7 +113,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPut("reSignUpOfTutor")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+      //  [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> ReSignUpOftutor(string id, SignUpModelOfTutor model)
         {
             try
@@ -147,7 +147,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPut("approveProfile")]
-        [Authorize(Roles = UserRoleAuthorize.Moderator)]
+      //  [Authorize(Roles = UserRoleAuthorize.Moderator)]
         public async Task<IActionResult> ApproveProfileTutor(string id)
         {
             var result = await _repo.ApproveProfileTutor(id);
@@ -169,7 +169,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPut("rejectProfile")]
-        [Authorize(Roles = UserRoleAuthorize.Moderator)]
+       // [Authorize(Roles = UserRoleAuthorize.Moderator)]
         public async Task<IActionResult> RejectProfileTutor(string id, ReasonReject reason)
         {
             var result = await _repo.RejectProfileTutor(id, reason);
@@ -191,7 +191,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpDelete("deleteSignUpTutor")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+      //  [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> DeleteSignUpTutor(string id)
         {
             var response = await _repo.DeleteSignUpTutor(id);
@@ -213,7 +213,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("GetRegisterTutor")]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> GetRegisterTutor(string id)
         {
             try
@@ -248,7 +248,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("ViewAmountTutor")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+      //  [Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewAmountTutor()
         {
             var response = await _repo.GetAmountTutor();
@@ -262,7 +262,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("viewAllTutor")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+       // [Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewListTutor()
         {
             try

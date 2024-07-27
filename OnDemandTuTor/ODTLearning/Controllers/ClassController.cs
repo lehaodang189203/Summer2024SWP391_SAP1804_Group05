@@ -23,7 +23,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("ViewClassRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Student + "," + UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Student + "," + UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> ViewClassRequest(string id)
         {
             var response = await _repo.GetClassRequest(id);
@@ -46,7 +46,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("ViewClassService")]
-        [Authorize(Roles = UserRoleAuthorize.Student + "," + UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Student + "," + UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> GetClassService(string id)
         {
             var response = await _repo.GetClassService(id);
@@ -68,7 +68,7 @@ namespace ODTLearning.Controllers
             });
         }
         [HttpPut("completeClassRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+        //[Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> CompleteClassRequest(string idClassRequest)
         {
             try
@@ -102,7 +102,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPut("completeClassService")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+        //[Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> CompleteClassService(string idBooking)
         {
             try

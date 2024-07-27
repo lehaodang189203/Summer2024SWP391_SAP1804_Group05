@@ -18,7 +18,7 @@ namespace ODTLearning.Controllers
             _repo = repo;
         }
         [HttpPost("createRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> CreateRequestLearning(string id,[FromBody] RequestLearningModel model)
         {
             try
@@ -51,7 +51,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpPost("selectTutor")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+        //[Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> SelectTutor(string idRequest, string idaccounttutor)
         {
             var response = await _repo.SelectTutor(idRequest, idaccounttutor);
@@ -73,7 +73,7 @@ namespace ODTLearning.Controllers
             });
         }
         [HttpPost("join-request")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> JoinRequest(string requestId, string id)
         {
             try
@@ -107,7 +107,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpGet("getAllRequestPending")]
-        [Authorize(Roles = UserRoleAuthorize.Moderator)]
+       // [Authorize(Roles = UserRoleAuthorize.Moderator)]
         public async Task<IActionResult> ViewRequest()
         {
             try
@@ -141,7 +141,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpGet("getAllApprovedRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Tutor)]
+       // [Authorize(Roles = UserRoleAuthorize.Tutor)]
         public async Task<IActionResult> ViewRequest(string id)
         {
             try
@@ -175,7 +175,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpGet("getAllTutorsJoinRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> ViewAllTutorJoinRequest(string idRequest)
         {
             try
@@ -209,7 +209,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpGet("getPedingRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+      //  [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> ViewPedingRequestLearning(string id)
         {
             try
@@ -243,7 +243,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpGet("getAppovedRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> ViewApprovedRequestLearning(string id)
         {
             try
@@ -278,7 +278,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("getRejectRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> ViewRejectRequestLearning(string id)
         {
             try
@@ -313,7 +313,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPut("updateRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+        //[Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> UpdateRequestLearning(string idRequest, [FromBody] RequestLearningModel model)
         {
             try
@@ -346,7 +346,7 @@ namespace ODTLearning.Controllers
             }
         }
         [HttpPut("approvedRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Moderator)]
+       // [Authorize(Roles = UserRoleAuthorize.Moderator)]
         public async Task<IActionResult> ApprovedRequestStatus(string idRequest)
         {
             try
@@ -381,7 +381,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpPut("rejectRequest")]
-        [Authorize(Roles = UserRoleAuthorize.Moderator)]
+       // [Authorize(Roles = UserRoleAuthorize.Moderator)]
         public async Task<IActionResult> RejectRequestStatus(string idRequest, ReasonReject model)
         {
             try
@@ -416,11 +416,11 @@ namespace ODTLearning.Controllers
         }
 
       
-        [HttpDelete("deleteRequestByStudent")]
-        [Authorize(Roles = UserRoleAuthorize.Student)]
+        [HttpDelete("deleteRequest")]
+       // [Authorize(Roles = UserRoleAuthorize.Student)]
         public async Task<IActionResult> DeleteRequestByStudent(string id, string idRequest)
         {
-            var request = await _repo.DeleteRequestByStudent(id, idRequest);
+            var request = await _repo.DeleteRequest(id, idRequest);
 
             if (request != null)
             {
@@ -438,30 +438,10 @@ namespace ODTLearning.Controllers
             });
         }
 
-        [HttpDelete("deleteRequestByModerator")]
-        [Authorize(Roles = UserRoleAuthorize.Moderator)]
-        public async Task<IActionResult> DeleteRequestByModerator(string idRequest)
-        {
-            var result = await _repo.DeleteRequestByModerator(idRequest);
-
-            if (!result.Success)
-            {
-                return NotFound(new
-                {
-                    Success = false,
-                    Message = result.Message
-                });
-            }
-
-            return Ok(new
-            {
-                Success = true,
-                Message = result.Message
-            });
-        }
+       
 
         [HttpGet("viewAllRequestPending")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+        //[Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewAllRequestPending()
         {
             try
@@ -497,7 +477,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("viewAllRequestApproved")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+       // [Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewAllRequestApproved()
         {
             try
@@ -533,7 +513,7 @@ namespace ODTLearning.Controllers
         }
 
         [HttpGet("viewAllRequestReject")]
-        [Authorize(Roles = UserRoleAuthorize.Admin)]
+        //[Authorize(Roles = UserRoleAuthorize.Admin)]
         public async Task<IActionResult> ViewAllRequetReject()
         {
             try
